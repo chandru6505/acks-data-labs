@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <title>Freelancers | ACKS Data Labs</title>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+<header class="bg-blue-900 text-white p-6">
+    <h1 class="text-3xl font-bold">ACKS Data Labs</h1>
+    <p class="text-sm mt-2">Freelancer Registration</p>
+</header>
+
+<nav class="bg-white shadow p-4 flex gap-4 justify-center">
+    <a href="/" class="text-blue-900 font-semibold hover:underline">Home</a>
+    <a href="/projects.html" class="text-blue-900 font-semibold hover:underline">Request Project</a>
+    <a href="/freelancers.html" class="text-blue-900 font-semibold hover:underline">Freelancers</a>
+    <a href="/about.html" class="text-blue-900 font-semibold hover:underline">About</a>
+</nav>
+
+<main class="max-w-3xl mx-auto p-6">
+
+<section class="bg-white p-6 rounded shadow">
+    <h2 class="text-2xl font-bold mb-4">Join as a Freelancer</h2>
+
+    <p class="mb-4">
+        We collaborate with skilled freelancers for data annotation and transcription
+        projects. Register below to be considered for upcoming work.
+    </p>
+
+    <form id="freelancerForm" class="space-y-4">
+        <input type="text" id="name" placeholder="Your Name"
+            class="w-full p-2 border rounded" required>
+
+        <input type="email" id="freelancerEmail" placeholder="Your Email"
+            class="w-full p-2 border rounded" required>
+
+        <input type="text" id="skills"
+            placeholder="Skills (Audio, Image, Video, Text)"
+            class="w-full p-2 border rounded" required>
+
+        <button type="submit"
+            class="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-800">
+            Register
+        </button>
+    </form>
+
+    <p id="freelancerResponse" class="mt-4 font-semibold"></p>
+</section>
+
+</main>
+
+<script>
+document.getElementById("freelancerForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    fetch("/api/register-freelancer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            name: document.getElementById("name").value,
+            email: document.getElementById("freelancerEmail").value,
+            skills: document.getElementById("skills").value
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("freelancerResponse").innerText =
+            data.message || data.error;
+    });
+});
+</script>
+
+</body>
+</html>

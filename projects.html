@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <title>Request Project | ACKS Data Labs</title>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+<header class="bg-blue-900 text-white p-6">
+    <h1 class="text-3xl font-bold">ACKS Data Labs</h1>
+    <p class="text-sm mt-2">Client Project Request</p>
+</header>
+
+<nav class="bg-white shadow p-4 flex gap-4 justify-center">
+    <a href="/" class="text-blue-900 font-semibold hover:underline">Home</a>
+    <a href="/projects.html" class="text-blue-900 font-semibold hover:underline">Request Project</a>
+    <a href="/freelancers.html" class="text-blue-900 font-semibold hover:underline">Freelancers</a>
+    <a href="/about.html" class="text-blue-900 font-semibold hover:underline">About</a>
+</nav>
+
+<main class="max-w-3xl mx-auto p-6">
+
+<section class="bg-white p-6 rounded shadow">
+    <h2 class="text-2xl font-bold mb-4">Request a Project</h2>
+
+    <form id="projectForm" class="space-y-4">
+        <input type="text" id="company" placeholder="Company Name" class="w-full p-2 border rounded" required>
+        <input type="email" id="clientEmail" placeholder="Email" class="w-full p-2 border rounded" required>
+
+        <select id="projectType" class="w-full p-2 border rounded" required>
+            <option value="">Select Project Type</option>
+            <option value="data-labeling">Data Labeling</option>
+            <option value="audio-transcription">Audio Transcription</option>
+            <option value="image-video-annotation">Image / Video Annotation</option>
+        </select>
+
+        <button type="submit"
+            class="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-800">
+            Submit Project Request
+        </button>
+    </form>
+
+    <p id="projectResponse" class="mt-4 font-semibold"></p>
+</section>
+
+</main>
+
+<script>
+document.getElementById("projectForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    fetch("/api/request-project", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            company: document.getElementById("company").value,
+            email: document.getElementById("clientEmail").value,
+            projectType: document.getElementById("projectType").value
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("projectResponse").innerText =
+            data.message || data.error;
+    });
+});
+</script>
+
+</body>
+</html>
